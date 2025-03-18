@@ -18,7 +18,7 @@ contains the models we built for this project
 ### predictions:
 contains the predictions made by our models
 
-### sample_dataL:
+### sample_data:
 contains the datasets provided to us by BCG
 
 ### scripts:
