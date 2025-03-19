@@ -442,7 +442,12 @@ def final_pred(activity_file, customer_file, complaints_file, model_type, model_
     selected_columns = ["customer_id", "Complaint", "churn_in_3mos", "Problem", "Problem Resolved", "Duration"]
     merged_final_df = merged_final_df[selected_columns]
 
-    merged_final_df = merged_final_df.rename(columns={"churn_in_3mos": "Churn _rediction"})
+    merged_final_df = merged_final_df.rename(columns={"churn_in_3mos": "Churn _Prediction"})
+
+    cols = list(merged_final_df.columns)  # Get the current column order
+    cols.remove("Churn_Prediction")  # Remove the target column from the list
+    cols.insert(1, "Churn_Prediction")  # Insert it at index 1
+    merged_final_df = merged_final_df[cols]  # Reorder the DataFrame
 
     if output_file:
 
@@ -459,16 +464,15 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Predict customer churn using a pre-trained model.")
 
     required_args = parser.add_argument_group("Required arguments")
-    required_args.add_argument("--activity", required=True, help="Path to activity data CSV")
-    required_args.add_argument("--customer", required=True, help="Path to customer data CSV")
-    required_args.add_argument("--complaints", required=True, help="Path to complaints Excel file")
+    required_args.add_argument("--activity", required=True, help="File of activity data CSV")
+    required_args.add_argument("--customer", required=True, help="File of customer data CSV")
+    required_args.add_argument("--complaints", required=True, help="File of complaints Excel")
     required_args.add_argument("--model_type", required=True, choices=["logistic", "lda", "adaboost"], help="Type of model to use for prediction")
-    required_args.add_argument("--nlp", default="random_forest_classifier.pkl", help="Path to trained NLP random forest classifier (default: random_forest_classifier.pkl)")
-    optional_args = parser.add_argument_group("Optional arguments")
-    optional_args.add_argument("--model", default="logistic_regression.pkl", help="Path to trained model (default: logistic_regression.pkl)")
-    optional_args.add_argument("--scaler", default="logistic_scaler.pkl", help="Path to saved scaler (default: logistic_scaler.pkl, only for logistic regression)")
-    optional_args.add_argument("--features", default="feature_names.pkl", help="Path to saved feature names (default: feature_names.pkl, ada_features.pkl for AdaBoost)")
-    optional_args.add_argument("--output", default=None, help="Path to save predictions (default: prints output)")
+    required_args.add_argument("--nlp", required=True, help="File trained NLP random forest classifier")
+    required_args.add_argument("--model", required=True, help="File of trained model")
+    required_args.add_argument("--scaler", required=True, help="File of trained scaler")
+    required_args.add_argument("--features", required=True, help="File with feature names")
+    required_args.add_argument("--output", required=True, help="File to save predictions")
 
     args = parser.parse_args()
 
