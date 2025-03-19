@@ -16,11 +16,6 @@ from sklearn.metrics import accuracy_score
 
 
 
-import os
-os.chdir("/Users/yoelwiner/Desktop/BCG_automation")  # Change to desired directory
-print("Current Working Directory:", os.getcwd())  # Verify change
-
-
 ### ------------------ Prepare Data Functions ------------------ ###
 
 def prepare_data_logistic(activity_file, customer_file, complaints_file):
