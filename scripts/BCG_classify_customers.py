@@ -442,7 +442,7 @@ def final_pred(activity_file, customer_file, complaints_file, model_type, model_
     selected_columns = ["customer_id", "Complaint", "churn_in_3mos", "Problem", "Problem Resolved", "Duration"]
     merged_final_df = merged_final_df[selected_columns]
 
-    merged_final_df = merged_final_df.rename(columns={"churn_in_3mos": "Churn _Prediction"})
+    merged_final_df = merged_final_df.rename(columns={"churn_in_3mos": "Churn_Prediction"})
 
     cols = list(merged_final_df.columns)  # Get the current column order
     cols.remove("Churn_Prediction")  # Remove the target column from the list
