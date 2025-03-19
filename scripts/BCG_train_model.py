@@ -483,28 +483,48 @@ def train_model_ada(activity_file, customer_file, complaints_file, output_model,
     joblib.dump(ada, output_model)
     joblib.dump(selected_features, output_features)
 
-### ------------------ Fixed Main Script ------------------ ###
-
+### ------------------ Fixed Main Script ------------------ ##
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Train a customer churn prediction model.")
 
-    parser.add_argument("--activity", required=True, help="Path to activity data CSV")
-    parser.add_argument("--customer", required=True, help="Path to customer data CSV")
-    parser.add_argument("--complaints", required=True, help="Path to complaints Excel file")
+    # Common arguments for all models
+    parser.add_argument("--activity", required=True, help="File of activity data CSV")
+    parser.add_argument("--customer", required=True, help="File of customer data CSV")
+    parser.add_argument("--complaints", required=True, help="File of complaints Excel")
     parser.add_argument("--model_type", required=True, choices=["logistic", "lda", "adaboost", "nlp"], help="Type of model to train")
-    parser.add_argument("--output_model", default="model.pkl", help="Path to save trained model")
-    parser.add_argument("--output_scaler", default="scaler.pkl", help="Path to save scaler (only for logistic regression and LDA)")
-    parser.add_argument("--output_features", default="feature_names.pkl", help="Path to save selected features (only for AdaBoost)")
+    parser.add_argument("--output_model", required=True, help="File to save trained model")
+
+    # Optional arguments that become mandatory for specific models
+    parser.add_argument("--output_scaler", help="File to save scaler (required for logistic regression and LDA)")
+    parser.add_argument("--output_features", help="File to save selected features (required for logistic regression, LDA, and AdaBoost)")
 
     args = parser.parse_args()
 
+    # **Enforce conditional requirements**
+    missing_args = []
+
+    if args.model_type in ["logistic", "lda"]:
+        if not args.output_scaler:
+            missing_args.append("--output_scaler (required for logistic and LDA)")
+        if not args.output_features:
+            missing_args.append("--output_features (required for logistic and LDA)")
+    
+    if args.model_type == "adaboost":
+        if not args.output_features:
+            missing_args.append("--output_features (required for AdaBoost)")
+
+    if missing_args:
+        parser.error(f"Missing required arguments for {args.model_type}: {', '.join(missing_args)}")
+
+    # **Call the appropriate training function**
     if args.model_type == "logistic":
         train_model_logistic(args.activity, args.customer, args.complaints, args.output_model, args.output_scaler, args.output_features)
     elif args.model_type == "lda":
         train_model_lda(args.activity, args.customer, args.complaints, args.output_model, args.output_scaler, args.output_features)
     elif args.model_type == "adaboost":
         train_model_ada(args.activity, args.customer, args.complaints, args.output_model, args.output_features)
-    elif args.model_type=="nlp":
+    elif args.model_type == "nlp":
         train_model_nlp(args.activity, args.customer, args.complaints, args.output_model)
 
     print(f"Training complete! Model saved to {args.output_model}.")
+
