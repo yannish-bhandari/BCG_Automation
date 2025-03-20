@@ -470,10 +470,15 @@ if __name__ == "__main__":
     required_args.add_argument("--model_type", required=True, choices=["logistic", "lda", "adaboost"], help="Type of model to use for prediction")
     required_args.add_argument("--nlp", required=True, help="File trained NLP random forest classifier")
     required_args.add_argument("--model", required=True, help="File of trained model")
-    required_args.add_argument("--scaler", required=True, help="File of trained scaler")
+    required_args.add_argument("--scaler", help="File of trained scaler (not required for adaboost)")
     required_args.add_argument("--features", required=True, help="File with feature names")
     required_args.add_argument("--output", required=True, help="File to save predictions")
 
     args = parser.parse_args()
 
-    final_pred(args.activity, args.customer, args.complaints, args.model_type, args.model, args.nlp, args.scaler, args.features, args.output)
+    # Check if scaler is required but missing
+    if args.model_type in ["logistic", "lda"] and not args.scaler:
+        print("Warning: --scaler is required for logistic and lda models.")
+    else:
+        # Run final_pred only if all required arguments are present
+        final_pred(args.activity, args.customer, args.complaints, args.model_type, args.model, args.nlp, args.scaler, args.features, args.output)
