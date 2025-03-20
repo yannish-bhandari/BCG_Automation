@@ -1,6 +1,6 @@
 # BCG_Automation
 
-This repository contains the final thesis project conducted in collaboration with BCG, focused on churn prediction for a telecom company. It includes all necessary code, data preprocessing steps, machine learning models, and analysis required to execute and replicate our churn prediction models. For ease of use, we have provided a downloadable ZIP file "BCG_automation.zip" that consolidates all files, allowing seamless execution in your environment. This repository serves as a complete resource for BCG to deploy, evaluate, and refine the churn prediction framework effectively.
+This repository contains the final thesis project conducted in collaboration with BCG, focused on churn prediction for a telecom company. It includes all necessary code, data preprocessing steps, machine learning models, and analysis required to execute and replicate our churn prediction models. For ease of use, donwload the entire respository as a zip file as it consolidates all files, allowing seamless execution in your environment. This repository serves as a complete resource for BCG to deploy, evaluate, and refine the churn prediction framework effectively.
 
 ## Breakdown of Repository
 
